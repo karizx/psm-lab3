@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Żart na dziś</string>
+    <string name="button_show_joke">Pokaż żart</string>
+    <string name="greeting">Cześć, %1$s! Oto Twój żart numer %2$d.</string>
+    <string name="joke_placeholder">Tester wchodzi do baru. Zamawia piwo. Zamawia 0 piw. Zamawia 999999999 piw. Zamawia jaszczurkę. Zamawia -1 piwa.</string>
+</resources>
