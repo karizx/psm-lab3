@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lab3.ui.theme.Lab3Theme
 import kotlin.random.Random
+import androidx.compose.ui.res.pluralStringResource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +54,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun JokeScreen(modifier: Modifier = Modifier) {
+    var seenCount by rememberSaveable { mutableIntStateOf(0) }
     val jokes = stringArrayResource(R.array.jokes)
     var currentJokeIndex by rememberSaveable { mutableIntStateOf(0) }
     var jokeNumber by rememberSaveable { mutableIntStateOf(1) }
@@ -99,6 +101,7 @@ fun JokeScreen(modifier: Modifier = Modifier) {
                 if (jokes.isNotEmpty()) {
                     currentJokeIndex = Random.nextInt(jokes.size)
                     jokeNumber++
+                    seenCount++;
                 }
             },
             shape = CircleShape,
@@ -106,7 +109,9 @@ fun JokeScreen(modifier: Modifier = Modifier) {
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFF00796B)
             )
-        ) {
+
+        )
+        {
             Text(
                 text = stringResource(R.string.button_show_joke),
                 textAlign = TextAlign.Center,
@@ -114,7 +119,11 @@ fun JokeScreen(modifier: Modifier = Modifier) {
                 fontSize = 16.sp
             )
         }
-
+        Text(
+            text = pluralStringResource(R.plurals.jokes_count, seenCount, seenCount),
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Medium
+        )
         Text(
             text = stringResource(
                 R.string.greeting,
