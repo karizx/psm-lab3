@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Żart na dziś</string>
     <string name="button_show_joke">Pokaż żart</string>
+    <string name="guest">gościu</string>
     <string name="greeting">Cześć, %1$s! Oto Twój żart numer %2$d.</string>
-    <string name="joke_placeholder">Tester wchodzi do baru. Zamawia piwo. Zamawia 0 piw. Zamawia 999999999 piw. Zamawia jaszczurkę. Zamawia -1 piwa.</string>
+
+    <string-array name="jokes">
+        <item>Tester wchodzi do baru. Zamawia piwo. Zamawia 0 piw. Zamawia 999999999 piw. Zamawia jaszczurkę. Zamawia -1 piwa.</item>
+        <item>Na świecie jest 10 rodzajów ludzi: ci, którzy rozumieją system binarny, i ci, którzy go nie rozumieją.</item>
+        <item>Dlaczego programiści wolą ciemny motyw? Ponieważ światło przyciąga robaki.</item>
+    </string-array>
 </resources>

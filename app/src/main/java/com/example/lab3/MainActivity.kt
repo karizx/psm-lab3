@@ -8,10 +8,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -30,12 +28,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lab3.ui.theme.Lab3Theme
+import kotlin.random.Random
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,8 +53,15 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun JokeScreen(modifier: Modifier = Modifier) {
-    // Stan licznika żartów
+    val jokes = stringArrayResource(R.array.jokes)
+    var currentJokeIndex by rememberSaveable { mutableIntStateOf(0) }
     var jokeNumber by rememberSaveable { mutableIntStateOf(1) }
+
+    val currentJokeText = if (jokes.isNotEmpty()) {
+        jokes[currentJokeIndex % jokes.size]
+    } else {
+        ""
+    }
 
     Column(
         modifier = modifier
@@ -63,7 +70,6 @@ fun JokeScreen(modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        // Tytuł pobierany z app_name
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.headlineMedium,
@@ -71,7 +77,6 @@ fun JokeScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.padding(top = 16.dp)
         )
 
-        // Karta z treścią żartu
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -81,7 +86,7 @@ fun JokeScreen(modifier: Modifier = Modifier) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = stringResource(R.string.joke_placeholder),
+                text = currentJokeText,
                 style = MaterialTheme.typography.bodyLarge,
                 textAlign = TextAlign.Center,
                 fontSize = 18.sp,
@@ -89,9 +94,13 @@ fun JokeScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        // Okrągły przycisk (wymóg zadania 1)
         Button(
-            onClick = { jokeNumber++ },
+            onClick = {
+                if (jokes.isNotEmpty()) {
+                    currentJokeIndex = Random.nextInt(jokes.size)
+                    jokeNumber++
+                }
+            },
             shape = CircleShape,
             modifier = Modifier.size(140.dp),
             colors = ButtonDefaults.buttonColors(
@@ -106,9 +115,12 @@ fun JokeScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        // Treść sparametryzowana (%1$s - gość, %2$d - numer żartu)
         Text(
-            text = stringResource(R.string.greeting, "gościu", jokeNumber),
+            text = stringResource(
+                R.string.greeting,
+                stringResource(R.string.guest),
+                jokeNumber
+            ),
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Gray,
             textAlign = TextAlign.Center,

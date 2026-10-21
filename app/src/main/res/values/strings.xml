@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">Joke of the Day</string>
     <string name="button_show_joke">Show a joke</string>
+    <string name="guest">guest</string>
     <string name="greeting">Hello, %1$s! Here is your joke number %2$d.</string>
-    <string name="joke_placeholder">A tester walks into a bar. Orders a beer. Orders 0 beers. Orders 999999999 beers. Orders a lizard. Orders -1 beers.</string>
+
+    <string-array name="jokes">
+        <item>A tester walks into a bar. Orders a beer. Orders 0 beers. Orders 999999999 beers. Orders a lizard. Orders -1 beers.</item>
+        <item>There are 10 types of people in the world: those who understand binary, and those who don\'t.</item>
+        <item>Why do programmers prefer dark mode? Because light attracts bugs.</item>
+    </string-array>
 </resources>
