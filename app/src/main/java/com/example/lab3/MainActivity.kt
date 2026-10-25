@@ -1,6 +1,10 @@
 package com.example.lab3
 
+import android.app.LocaleManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
+import android.os.LocaleList
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -8,8 +12,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -17,6 +24,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,6 +36,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -36,7 +46,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.lab3.ui.theme.Lab3Theme
 import kotlin.random.Random
-import androidx.compose.ui.res.pluralStringResource
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,12 +61,24 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+// Funkcja przełączająca język przy użyciu LocaleManager
+fun setAppLocale(context: Context, languageTag: String) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        val localeManager = context.getSystemService(LocaleManager::class.java)
+        if (languageTag.isEmpty()) {
+            localeManager?.applicationLocales = LocaleList.getEmptyLocaleList()
+        } else {
+            localeManager?.applicationLocales = LocaleList.forLanguageTags(languageTag)
+        }
+    }
+}
+
 @Composable
 fun JokeScreen(modifier: Modifier = Modifier) {
-    var seenCount by rememberSaveable { mutableIntStateOf(0) }
+    val context = LocalContext.current
     val jokes = stringArrayResource(R.array.jokes)
     var currentJokeIndex by rememberSaveable { mutableIntStateOf(0) }
-    var jokeNumber by rememberSaveable { mutableIntStateOf(1) }
+    var seenCount by rememberSaveable { mutableIntStateOf(0) }
 
     val currentJokeText = if (jokes.isNotEmpty()) {
         jokes[currentJokeIndex % jokes.size]
@@ -68,17 +89,35 @@ fun JokeScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(24.dp),
+            .padding(horizontal = 24.dp, vertical = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
+        // Tytuł
         Text(
             text = stringResource(R.string.app_name),
             style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 8.dp)
         )
 
+        // Pasek przycisków wyboru języka (Zadanie 4)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            OutlinedButton(onClick = { setAppLocale(context, "") }) {
+                Text(text = stringResource(R.string.lang_system))
+            }
+            OutlinedButton(onClick = { setAppLocale(context, "pl") }) {
+                Text(text = stringResource(R.string.lang_pl))
+            }
+            OutlinedButton(onClick = { setAppLocale(context, "en") }) {
+                Text(text = stringResource(R.string.lang_en))
+            }
+        }
+
+        // Karta z żartem
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,44 +135,51 @@ fun JokeScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        Button(
-            onClick = {
-                if (jokes.isNotEmpty()) {
-                    currentJokeIndex = Random.nextInt(jokes.size)
-                    jokeNumber++
-                    seenCount++;
-                }
-            },
-            shape = CircleShape,
-            modifier = Modifier.size(140.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF00796B)
-            )
+        // Sekcja: Przycisk + Licznik
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Button(
+                onClick = {
+                    if (jokes.isNotEmpty()) {
+                        currentJokeIndex = Random.nextInt(jokes.size)
+                        seenCount++
+                    }
+                },
+                shape = CircleShape,
+                modifier = Modifier.size(140.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF00796B)
+                )
+            ) {
+                Text(
+                    text = stringResource(R.string.button_show_joke),
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 16.sp
+                )
+            }
 
-        )
-        {
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
-                text = stringResource(R.string.button_show_joke),
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.SemiBold,
-                fontSize = 16.sp
+                text = pluralStringResource(R.plurals.jokes_count, seenCount, seenCount),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Medium
             )
         }
-        Text(
-            text = pluralStringResource(R.plurals.jokes_count, seenCount, seenCount),
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Medium
-        )
+
+        // Dolny tekst sparametryzowany
         Text(
             text = stringResource(
                 R.string.greeting,
                 stringResource(R.string.guest),
-                jokeNumber
+                seenCount
             ),
             style = MaterialTheme.typography.bodyMedium,
             color = Color.Gray,
             textAlign = TextAlign.Center,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 8.dp)
         )
     }
 }

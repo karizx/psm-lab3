@@ -5,6 +5,10 @@
     <string name="guest">gościu</string>
     <string name="greeting">Cześć, %1$s! Oto Twój żart numer %2$d.</string>
 
+    <string name="lang_system">Systemowy</string>
+    <string name="lang_pl">Polski</string>
+    <string name="lang_en">English</string>
+
     <plurals name="jokes_count">
         <item quantity="one">Obejrzano %d żart</item>
         <item quantity="few">Obejrzano %d żarty</item>
