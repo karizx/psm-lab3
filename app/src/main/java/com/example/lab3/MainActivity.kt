@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -102,18 +103,46 @@ fun JokeScreen(modifier: Modifier = Modifier) {
         )
 
         // Pasek przycisków wyboru języka (Zadanie 4)
+        // Pasek przycisków wyboru języka z elastycznym dopasowaniem (weight)
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            OutlinedButton(onClick = { setAppLocale(context, "") }) {
-                Text(text = stringResource(R.string.lang_system))
+            OutlinedButton(
+                onClick = { setAppLocale(context, "") },
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.lang_system),
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
             }
-            OutlinedButton(onClick = { setAppLocale(context, "pl") }) {
-                Text(text = stringResource(R.string.lang_pl))
+            OutlinedButton(
+                onClick = { setAppLocale(context, "pl") },
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.lang_pl),
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
             }
-            OutlinedButton(onClick = { setAppLocale(context, "en") }) {
-                Text(text = stringResource(R.string.lang_en))
+            OutlinedButton(
+                onClick = { setAppLocale(context, "en") },
+                modifier = Modifier.weight(1f),
+                contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.lang_en),
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
             }
         }
 

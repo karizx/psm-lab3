@@ -25,6 +25,9 @@ android {
                 enable = true
                 packageScope = setOf("androidx.**", "kotlin.**", "kotlinx.**")
             }
+            debug {
+                isPseudoLocalesEnabled = true
+            }
         }
     }
     compileOptions {
