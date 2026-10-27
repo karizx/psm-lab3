@@ -4,8 +4,6 @@
 * **Autor:** Karol Budzyń
 * **Uczelnia:** Akademia Tarnowska
 * **Kierunek:** Informatyka, Inżynieria Systemów Inteligentnych
-* **Środowisko:** Android Studio Ladybug / Koala, Kotlin 2.x, Jetpack Compose, Material 3
-* **Min SDK:** 24 | **Target/Compile SDK:** 34+
 
 ---
 
